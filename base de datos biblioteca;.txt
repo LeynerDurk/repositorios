@@ -1,0 +1,53 @@
+CREATE DATABASE biblioteca;
+
+USE biblioteca;
+
+CREATE TABLE libros (
+  id_libro INT NOT NULL AUTO_INCREMENT,
+  titulo VARCHAR(255) NOT NULL,
+  id_autor INT NOT NULL,
+  editorial VARCHAR(255) NOT NULL,
+  ano_publicacion INT NOT NULL,
+  genero VARCHAR(255) NOT NULL,
+  ubicacion VARCHAR(255) NOT NULL,
+  estado ENUM('disponible', 'prestado') NOT NULL DEFAULT 'disponible',
+  PRIMARY KEY (id_libro),
+  FOREIGN KEY (id_autor) REFERENCES autores(id_autor)
+);
+
+CREATE TABLE autores (
+  id_autor INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(255) NOT NULL,
+  apellido VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id_autor)
+);
+
+CREATE TABLE usuarios (
+  id_usuario INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(255) NOT NULL,
+  apellido VARCHAR(255) NOT NULL,
+  correo_electronico VARCHAR(255) NOT NULL,
+  numero_telefono VARCHAR(20) NOT NULL,
+  direccion VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id_usuario)
+);
+
+CREATE TABLE prestamos (
+  id_prestamo INT NOT NULL AUTO_INCREMENT,
+  id_libro INT NOT NULL,
+  id_usuario INT NOT NULL,
+  fecha_prestamo DATE NOT NULL,
+  fecha_devolucion DATE,
+  PRIMARY KEY (id_prestamo),
+  FOREIGN KEY (id_libro) REFERENCES libros(id_libro),
+  FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE multas (
+  id_multa INT NOT NULL AUTO_INCREMENT,
+  id_prestamo INT NOT NULL,
+  fecha_multa DATE NOT NULL,
+  cantidad DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (id_multa),
+  FOREIGN KEY (id_prestamo) REFERENCES prestamos(id_prestamo)
+);

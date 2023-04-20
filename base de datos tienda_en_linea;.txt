@@ -1,0 +1,54 @@
+CREATE DATABASE tienda_en_linea;
+
+USE tienda_en_linea;
+
+CREATE TABLE productos (
+  id_producto INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(255) NOT NULL,
+  descripcion TEXT NOT NULL,
+  precio DECIMAL(10,2) NOT NULL,
+  stock INT NOT NULL,
+  imagen VARCHAR(255),
+  PRIMARY KEY (id_producto)
+);
+
+CREATE TABLE clientes (
+  id_cliente INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(255) NOT NULL,
+  apellido VARCHAR(255) NOT NULL,
+  correo_electronico VARCHAR(255) NOT NULL,
+  direccion VARCHAR(255) NOT NULL,
+  ciudad VARCHAR(255) NOT NULL,
+  pais VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id_cliente)
+);
+
+CREATE TABLE pedidos (
+  id_pedido INT NOT NULL AUTO_INCREMENT,
+  id_cliente INT NOT NULL,
+  fecha_pedido DATE NOT NULL,
+  total_pedido DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (id_pedido),
+  FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente)
+);
+
+CREATE TABLE detalles_pedidos (
+  id_detalle INT NOT NULL AUTO_INCREMENT,
+  id_pedido INT NOT NULL,
+  id_producto INT NOT NULL,
+  cantidad INT NOT NULL,
+  precio DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (id_detalle),
+  FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido),
+  FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+);
+
+CREATE TABLE pagos (
+  id_pago INT NOT NULL AUTO_INCREMENT,
+  id_pedido INT NOT NULL,
+  metodo_pago ENUM('tarjeta', 'transferencia') NOT NULL,
+  fecha_pago DATE NOT NULL,
+  total_pago DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (id_pago),
+  FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido)
+);

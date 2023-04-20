@@ -1,0 +1,45 @@
+CREATE DATABASE red_social;
+
+USE red_social;
+
+CREATE TABLE usuarios (
+  id_usuario INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(255) NOT NULL,
+  apellido VARCHAR(255) NOT NULL,
+  correo_electronico VARCHAR(255) NOT NULL,
+  fecha_nacimiento DATE NOT NULL,
+  genero ENUM('masculino', 'femenino', 'otro') NOT NULL,
+  biografia TEXT,
+  foto_perfil VARCHAR(255),
+  PRIMARY KEY (id_usuario)
+);
+
+CREATE TABLE publicaciones (
+  id_publicacion INT NOT NULL AUTO_INCREMENT,
+  id_usuario INT NOT NULL,
+  fecha_publicacion DATETIME NOT NULL,
+  contenido TEXT NOT NULL,
+  PRIMARY KEY (id_publicacion),
+  FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE amigos (
+  id_amigo INT NOT NULL AUTO_INCREMENT,
+  id_usuario1 INT NOT NULL,
+  id_usuario2 INT NOT NULL,
+  fecha_amistad DATE NOT NULL,
+  PRIMARY KEY (id_amigo),
+  FOREIGN KEY (id_usuario1) REFERENCES usuarios(id_usuario),
+  FOREIGN KEY (id_usuario2) REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE comentarios (
+  id_comentario INT NOT NULL AUTO_INCREMENT,
+  id_publicacion INT NOT NULL,
+  id_usuario INT NOT NULL,
+  fecha_comentario DATETIME NOT NULL,
+  contenido TEXT NOT NULL,
+  PRIMARY KEY (id_comentario),
+  FOREIGN KEY (id_publicacion) REFERENCES publicaciones(id_publicacion),
+  FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
